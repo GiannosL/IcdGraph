@@ -29,7 +29,10 @@ def main():
 
     # plotting
     plot = Plot()
-    plot.graph(g=graph)
+    plot.interactive_graph(g=graph,
+                           outfile=params.interactive_plot_file)
+    plot.graph(g=graph,
+               outfile=params.plot_file)
 
 
 if __name__ == '__main__':

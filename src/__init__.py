@@ -5,6 +5,9 @@ class Parameters:
         self.phecode_file = 'data/Phecode_map_v1_2_icd10_WHO_beta.csv'
         self.hpo_file = 'data/hpo-phecode1.2_links.tsv'
 
+        self.plot_file = 'plot.png'
+        self.interactive_plot_file = 'plot.html'
+
         # node colors
         self.icd_color = '#64B6AC'
         self.phecode_color = '#FAD4C0'

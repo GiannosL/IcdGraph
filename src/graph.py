@@ -104,6 +104,10 @@ class Graph:
         for edge_type, edge_list in self.edge_dictionary.items():
             my_graph.add_edges_from(edge_list)
 
+        # get node degrees
+        node_degrees = dict(my_graph.degree())
+        nx.set_node_attributes(my_graph, node_degrees, 'degree')
+
         return my_graph
 
     def get_info(self) -> Dict[str, List[str]]:
