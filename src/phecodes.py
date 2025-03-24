@@ -1,5 +1,5 @@
 import pandas as pd
-from typing import List, Tuple
+from typing import Tuple
 
 class PheCodes:
     def __init__(self):
@@ -59,5 +59,7 @@ def parse_phecodes(file_name: str) -> PheCodes:
                 phecode=phe,
                 phecode_desc=phe_desc
             )
+
+    phecodes.process()
 
     return phecodes

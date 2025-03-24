@@ -15,7 +15,8 @@ def main():
     # parse phecode to icd file
     phecodes2icd = parse_phecodes(file_name=params.phecode_file)
     # parse hpo to phecode file
-    hpo2phecode = parse_hpos(file_name=params.hpo_file)
+    hpo2phecode = parse_hpos(file_name=params.hpo_file,
+                             subset_phecodes=phecodes2icd.phecodes)
 
     # generate graphs
     graph = Graph(p=params,

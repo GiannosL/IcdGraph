@@ -1,5 +1,5 @@
 import pandas as pd
-from typing import Tuple
+from typing import List, Tuple
 
 
 class HPOtoPheCode:
@@ -47,7 +47,7 @@ class HPOtoPheCode:
         return self.hpo_list[i], self.phecode_list[i]
 
 
-def parse_hpos(file_name: str) -> HPOtoPheCode:
+def parse_hpos(file_name: str, subset_phecodes: List[str] = []) -> HPOtoPheCode:
     """
     Parses input file and generates HPO object.
 
@@ -67,6 +67,10 @@ def parse_hpos(file_name: str) -> HPOtoPheCode:
     # save to HPO object
     hpo = HPOtoPheCode()
     for phecode, phe_lab, phe_cat, hpo_code, hpo_lab in df.to_records(index=False):
+        if subset_phecodes:
+            if not (phecode in subset_phecodes):
+                continue
+        # if continuing add the edge
         hpo.add(
             phecode=phecode,
             phecode_label=phe_lab,
