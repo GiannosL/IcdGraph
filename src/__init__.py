@@ -1,3 +1,6 @@
+from typing import Tuple
+
+
 class Parameters:
     def __init__(self):
         # local files
@@ -26,3 +29,17 @@ class Parameters:
             return self.hpo_color
 
         raise ValueError(f'Node type "{node_type}" not available!')
+
+
+class EdgeType:
+    def __init__(self, src: str, rel: str, dst: str):
+        self.edge_type = (src, rel, dst)
+
+    def __call__(self) -> Tuple[str, str, str]:
+        return self.edge_type
+
+    def __getitem__(self, item: int) -> str:
+        return self.edge_type[item]
+
+    def __len__(self) -> int:
+        return len(self.edge_type)
