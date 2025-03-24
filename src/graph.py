@@ -1,7 +1,8 @@
-from collections import defaultdict
-
+import torch
 import networkx as nx
+from collections import defaultdict
 from typing import List, Dict, Tuple
+from torch_geometric.data import HeteroData
 
 from src import Parameters
 from src.hpo import HPOtoPheCode
@@ -36,7 +37,10 @@ class Graph:
         self.node_dictionary = self.get_info()
 
         # once all data has been pre-processed generate graphs
+        self.node_encryptions = {}
         self.networkx_graph = self.get_networkx_graph(params=p)
+        self.torch_graph = self.get_torch_graph()
+        self.rev_node_encryptions = {v: k for k, v in self.node_encryptions.items()}
 
     def get_icd_hierarchical_edge_list(self) -> List[Tuple[str, str]]:
         """
@@ -147,4 +151,35 @@ class Graph:
         else:
             print(my_line)
 
+    def get_torch_graph(self) -> HeteroData:
+        """
+        Generates torch `HeteroData` graph object.
+        """
+        #
+        # get nodes and encode them
+        node_dict = defaultdict(list)
+        for edge_type, edge_list in self.edge_dictionary.items():
+            for node_a, node_b in edge_list:
+                node_dict[edge_type[0]].append(node_a)
+                node_dict[edge_type[2]].append(node_b)
+        node_dict = dict(node_dict)
+        for node_type, node_list in node_dict.items():
+            sorted_nodes = sorted(set(node_list))
+            self.node_encryptions[node_type] = {node: i for i, node in enumerate(sorted_nodes)}
 
+        edge_dict = {}
+        for edge_type, edge_list in self.edge_dictionary.items():
+            edge_dict[edge_type] = [(self.node_encryptions[edge_type[0]][edge])]
+
+        # generate heterogeneous graph
+        my_graph = HeteroData()
+        # nodes
+        for node_type, node_dict in self.node_encryptions.items():
+            my_graph[node_type].node_ids = torch.arange(len(node_dict.keys()))
+            my_graph[node_type].x = torch.ones((len(node_dict.keys()), 7)) # TODO: replace with actual feautres
+
+
+        print(my_graph)
+        exit()
+
+        return my_graph
