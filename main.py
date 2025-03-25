@@ -11,7 +11,7 @@ def main():
     params = Parameters()
 
     # parse icd codes
-    icd = parse_icd(file_name=params.icd_file)
+    icd = parse_icd(file_list=params.icd_files)
     # parse phecode to icd file
     phecodes2icd = parse_phecodes(file_name=params.phecode_file)
     # parse hpo to phecode file

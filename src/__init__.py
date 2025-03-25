@@ -4,7 +4,10 @@ from typing import Tuple
 class Parameters:
     def __init__(self):
         # local files
-        self.icd_file = 'data/icd_chapter_i.txt'
+        self.icd_files = [
+            'data/icd_chapter_i.txt',
+            'data/icd_chapter_k.txt',
+        ]
         self.phecode_file = 'data/Phecode_map_v1_2_icd10_WHO_beta.csv'
         self.hpo_file = 'data/hpo-phecode1.2_links.tsv'
 

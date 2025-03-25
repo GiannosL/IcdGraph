@@ -67,21 +67,25 @@ class ICD:
         return len(self.codes)
 
 
-def parse_icd(file_name: str) -> ICD:
+def parse_icd(file_list: List[str]) -> ICD:
     """
     `filename`: path to the ICD-10 input file
     `return`: ICD object containing all codes in the file
     """
-    with open(file_name, 'r') as f:
-        contents = f.read().splitlines()
-    
+    # empty ICD object
     icd_codes = ICD()
-    for line in contents[1:]:
-        split_line = line.split(';')
-        icd_codes.add(
-            code=split_line[0],
-            desc=split_line[1]
-        )
+
+    # iterate over files
+    for file_name in file_list:
+        with open(file_name, 'r') as f:
+            contents = f.read().splitlines()
+
+        for line in contents[1:]:
+            split_line = line.split(';')
+            icd_codes.add(
+                code=split_line[0],
+                desc=split_line[1]
+            )
 
     # apply preprocessing to the finished dataset
     icd_codes.process()
