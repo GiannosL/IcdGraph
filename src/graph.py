@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 import networkx as nx
 from collections import defaultdict
 from typing import List, Dict, Tuple
@@ -110,7 +111,7 @@ class Graph:
 
         # get node degrees
         node_degrees = dict(my_graph.degree())
-        nx.set_node_attributes(my_graph, node_degrees, 'degree')
+        nx.set_node_attributes(my_graph, node_degrees, name='degree')
 
         return my_graph
 
@@ -169,15 +170,23 @@ class Graph:
 
         edge_dict = {}
         for edge_type, edge_list in self.edge_dictionary.items():
-            edge_dict[edge_type] = [(self.node_encryptions[edge_type[0]][edge])]
+            edge_dict[edge_type] = []
+            for node_a, node_b in edge_list:
+                edge_dict[edge_type].append(
+                    (self.node_encryptions[edge_type[0]][node_a], self.node_encryptions[edge_type[2]][node_b])
+                )
 
         # generate heterogeneous graph
         my_graph = HeteroData()
         # nodes
         for node_type, node_dict in self.node_encryptions.items():
             my_graph[node_type].node_ids = torch.arange(len(node_dict.keys()))
-            my_graph[node_type].x = torch.ones((len(node_dict.keys()), 7)) # TODO: replace with actual feautres
+            # TODO: replace with actual feautres
+            my_graph[node_type].x = torch.ones((len(node_dict.keys()), 7)).to(torch.float32)
 
+        for edge_type, edge_list in edge_dict.items():
+            edge_array = np.array(edge_list).T
+            my_graph[edge_type].edge_index = torch.from_numpy(edge_array).to(torch.int32)
 
         print(my_graph)
         exit()
