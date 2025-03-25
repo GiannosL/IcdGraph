@@ -1,6 +1,7 @@
 from src import Parameters
 from src.plot import Plot
 from src.graph import  Graph
+from src.gnn import run_gnn
 from src.hpo import parse_hpos
 from src.chapter_data import parse_icd
 from src.phecodes import parse_phecodes
@@ -26,6 +27,15 @@ def main():
 
     # save graph statistiscs
     graph.graph_statistics()
+
+    # Graph Neural Network training
+
+    run_gnn(
+        graph=graph.torch_graph,
+        edge_type=params.edge_type,
+        epochs=params.epochs,
+        itta=params.learning_rate
+    )
 
     # plotting
     plot = Plot()

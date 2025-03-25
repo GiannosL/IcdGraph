@@ -4,6 +4,7 @@ import pandas as pd
 
 from typing import List, Dict
 from src import EdgeType
+from src.graph import Graph
 from src.nn_stuff.embedding_space import EmbeddingSpace
 
 
@@ -77,7 +78,7 @@ class ResultsGNN:
         self.test_eli = edge_label_index.tolist()
         self.test_labels = edge_label.tolist()
 
-    def annotate_results(self, kg: KnowledgeGraph):
+    def annotate_results(self, kg: Graph):
         """
         Annotates the training, validation, and test results using the ID map from the knowledge graph.
         :param kg: KnowledgeGraph object, used for the kg.node_names_encoding attribute
@@ -100,8 +101,8 @@ class ResultsGNN:
             """
             res_dict = {self.edge_type[0]: [], self.edge_type[2]: [], 'true_label': [], 'score': [], 'set': []}
 
-            node_names_a = {v: k for k, v in name_dict[self.edge_type[0]].items()}
-            node_names_b = {v: k for k, v in name_dict[self.edge_type[2]].items()}
+            node_names_a = name_dict[self.edge_type[0]]
+            node_names_b = name_dict[self.edge_type[2]]
 
             # iterate over every edge and annotate the nodes and add the score
             for i in range(len(eli[0])):
@@ -125,17 +126,17 @@ class ResultsGNN:
 
         #
         train_annotated = set_results(eli=self.training_eli,
-                                      name_dict=kg.node_names_encoding,
+                                      name_dict=kg.rev_node_encryptions,
                                       scores=self.training_results,
                                       labels=self.training_labels,
                                       set_name='training')
         validation_annotated = set_results(eli=self.validation_eli,
-                                           name_dict=kg.node_names_encoding,
+                                           name_dict=kg.rev_node_encryptions,
                                            scores=self.validation_results,
                                            labels=self.validation_labels,
                                            set_name='validation')
         test_annotated = set_results(eli=self.test_eli,
-                                     name_dict=kg.node_names_encoding,
+                                     name_dict=kg.rev_node_encryptions,
                                      scores=self.test_results,
                                      labels=self.test_labels,
                                      set_name='test')

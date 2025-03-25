@@ -25,14 +25,23 @@ class Graph:
         # ICD-10 hierarchical dictionary
         self.icd = icd_data.hierarchical_dictionary
         self.edge_dictionary[('icd', 'decomposes_to', 'icd')] = self.get_icd_hierarchical_edge_list()
+        self.edge_dictionary[('icd', 'is_part_of', 'icd')] = get_reverse_edgelist(
+            edge_list=self.edge_dictionary[('icd', 'decomposes_to', 'icd')]
+        )
 
         # PheCode to ICD-10 edge-list
         self.phecode = phecode_data
         self.edge_dictionary[('phecode', 'is_equivalent_to', 'icd')] = self.get_phecode2icd_edge_list()
+        self.edge_dictionary[('icd', 'is_also_eq_to', 'phecode')] = get_reverse_edgelist(
+            edge_list=self.edge_dictionary[('phecode', 'is_equivalent_to', 'icd')]
+        )
 
         # HPO to PheCode
         self.hpo = hpo_data
         self.edge_dictionary[('hpo', 'is_connected_to', 'phecode')] = self.get_hpo2phecode_edge_list()
+        self.edge_dictionary[('phecode', 'rev_connection_to', 'hpo')] = get_reverse_edgelist(
+            edge_list=self.edge_dictionary[('hpo', 'is_connected_to', 'phecode')]
+        )
 
         # gather information on data
         self.node_dictionary = self.get_info()
@@ -41,7 +50,10 @@ class Graph:
         self.node_encryptions = {}
         self.networkx_graph = self.get_networkx_graph(params=p)
         self.torch_graph = self.get_torch_graph()
-        self.rev_node_encryptions = {v: k for k, v in self.node_encryptions.items()}
+
+        self.rev_node_encryptions = {}
+        for node_type, my_node_dict in self.node_encryptions.items():
+             self.rev_node_encryptions[node_type] = {v: k for k, v in my_node_dict.items()}
 
     def get_icd_hierarchical_edge_list(self) -> List[Tuple[str, str]]:
         """
@@ -180,15 +192,22 @@ class Graph:
         my_graph = HeteroData()
         # nodes
         for node_type, node_dict in self.node_encryptions.items():
-            my_graph[node_type].node_ids = torch.arange(len(node_dict.keys()))
+            my_graph[node_type].node_ids = torch.arange(len(node_dict.keys())).to(torch.int64)
             # TODO: replace with actual feautres
             my_graph[node_type].x = torch.ones((len(node_dict.keys()), 7)).to(torch.float32)
 
         for edge_type, edge_list in edge_dict.items():
             edge_array = np.array(edge_list).T
-            my_graph[edge_type].edge_index = torch.from_numpy(edge_array).to(torch.int32)
-
-        print(my_graph)
-        exit()
+            my_graph[edge_type].edge_index = torch.from_numpy(edge_array).to(torch.int64)
 
         return my_graph
+
+
+def get_reverse_edgelist(edge_list: List[Tuple[str, str]]) -> List[Tuple[str, str]]:
+    """
+    Reverses the imput edgelist.
+    `params: edge_list` List containing tuple of edges.
+    `return` List of edges reversed
+    """
+
+    return [(edge[1], edge[0]) for edge in edge_list]

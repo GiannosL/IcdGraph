@@ -1,6 +1,20 @@
 from typing import Tuple
 
 
+class EdgeType:
+    def __init__(self, src: str, rel: str, dst: str):
+        self.edge_type = (src, rel, dst)
+
+    def __call__(self) -> Tuple[str, str, str]:
+        return self.edge_type
+
+    def __getitem__(self, item: int) -> str:
+        return self.edge_type[item]
+
+    def __len__(self) -> int:
+        return len(self.edge_type)
+
+
 class Parameters:
     def __init__(self):
         # local files
@@ -19,6 +33,17 @@ class Parameters:
         self.phecode_color = '#FAD4C0'
         self.hpo_color = '#C0FDFB'
 
+        # edge of interest
+        self.edge_type = EdgeType(
+            src='phecode',
+            rel='is_equivalent_to',
+            dst='icd',
+        )
+
+        # GNN parameters
+        self.epochs = 500
+        self.learning_rate = 0.001
+
     def get_color(self, node_type: str) -> str:
         """
         `node_type`: node type within selected options
@@ -32,17 +57,3 @@ class Parameters:
             return self.hpo_color
 
         raise ValueError(f'Node type "{node_type}" not available!')
-
-
-class EdgeType:
-    def __init__(self, src: str, rel: str, dst: str):
-        self.edge_type = (src, rel, dst)
-
-    def __call__(self) -> Tuple[str, str, str]:
-        return self.edge_type
-
-    def __getitem__(self, item: int) -> str:
-        return self.edge_type[item]
-
-    def __len__(self) -> int:
-        return len(self.edge_type)

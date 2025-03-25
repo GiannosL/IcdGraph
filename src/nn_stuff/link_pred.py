@@ -14,13 +14,9 @@ class LinkPredictor(torch.nn.Module):
             self,
             edge_type: EdgeType,
             train_graph: HeteroData,
-            classifier_type: str,
             depth: int = 3,
     ):
         super().__init__()
-        # make sure that classfier type is within selection
-        classifier_types = ['linear', 'similarity']
-        assert(classifier_type in classifier_types)
 
         # get edge type and size of input features
         self.edge_type = edge_type()

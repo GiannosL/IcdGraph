@@ -13,7 +13,6 @@ def run_gnn(
         edge_type: EdgeType,
         epochs: int = 5,
         itta: float = 0.01,
-        classification_type: str = 'linear',
         ) -> ResultsGNN:
     # get running device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -32,7 +31,6 @@ def run_gnn(
     model = LinkPredictor(
         edge_type=edge_type,
         train_graph=train_data,
-        classifier_type=classification_type
     )
     optimizer = torch.optim.Adam(model.parameters(), lr=itta)
     criterion = torch.nn.BCEWithLogitsLoss()
