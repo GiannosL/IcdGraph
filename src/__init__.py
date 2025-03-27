@@ -28,6 +28,25 @@ class Parameters:
         self.hpo_file = 'data/hpo-phecode1.2_links.tsv'
         self.primekg_file = 'data/kg.csv'
 
+        # primekg relationships of interest
+        self.edge_type_list = [
+            'protein_protein',
+            'drug_protein',
+            'contraindication',
+            'indication',
+            'off-label use',
+            'drug_drug',
+            'phenotype_protein',
+            'phenotype_phenotype',
+            'disease_phenotype_negative',
+            'disease_phenotype_positive',
+            'disease_protein',
+            'disease_disease',
+            'drug_effect',
+            'pathway_pathway',
+            'pathway_protein',
+        ]
+
         self.plot_file = Path('~/Desktop/plot.png').expanduser()
         self.interactive_plot_file = Path('~/Desktop/plot.html').expanduser()
         self.training_embedding_plot_file = Path('~/Desktop/training_embeddings.png').expanduser()

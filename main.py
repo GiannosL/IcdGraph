@@ -3,6 +3,7 @@ from src.plot import Plot
 from src.graph import  Graph
 from src.gnn import run_gnn
 from src.hpo import parse_hpos
+from src.primekg import parse_primekg
 from src.chapter_data import parse_icd
 from src.phecodes import parse_phecodes
 
@@ -18,6 +19,8 @@ def main():
     # parse hpo to phecode file
     hpo2phecode = parse_hpos(file_name=params.hpo_file,
                              subset_phecodes=phecodes2icd.phecodes)
+    primekg = parse_primekg(file_name=params.primekg_file,
+                            edge_types=params.edge_type_list)
 
     # generate graphs
     graph = Graph(p=params,
