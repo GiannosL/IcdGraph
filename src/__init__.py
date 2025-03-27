@@ -20,6 +20,7 @@ class Parameters:
         # local files
         self.icd_files = [
             'data/icd_chapter_i.txt',
+            'data/icd_chapter_j.txt',
             'data/icd_chapter_k.txt',
         ]
         self.phecode_file = 'data/Phecode_map_v1_2_icd10_WHO_beta.csv'

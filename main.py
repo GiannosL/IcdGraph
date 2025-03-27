@@ -29,8 +29,7 @@ def main():
     graph.graph_statistics()
 
     # Graph Neural Network training
-
-    run_gnn(
+    results = run_gnn(
         graph=graph.torch_graph,
         edge_type=params.edge_type,
         epochs=params.epochs,
@@ -41,8 +40,11 @@ def main():
     plot = Plot()
     plot.interactive_graph(g=graph,
                            outfile=params.interactive_plot_file)
-    plot.graph(g=graph,
-               outfile=params.plot_file)
+    plot.embedding_space(emb=results.training_embedding_space,
+                         parameters=params,
+                         title='Training set embeddings')
+    #plot.graph(g=graph,
+    #           outfile=params.plot_file)
 
 
 if __name__ == '__main__':

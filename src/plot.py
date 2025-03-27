@@ -1,11 +1,15 @@
+import torch
+import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 from typing import List, Dict
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
 
-from networkx.drawing import spring_layout
-
+from src import Parameters
 from src.graph import Graph
+from src.nn_stuff.embedding_space import EmbeddingSpace
 
 
 class Plot:
@@ -95,6 +99,59 @@ class Plot:
         else:
             fig.show()
 
+    def embedding_space(
+            self,
+            parameters: Parameters,
+            emb: EmbeddingSpace,
+            title: str,
+    ):
+        """
+        Plot embedding space.
+        """
+        embeddings, sizes, nodes = [], [], []
+        for node_type in emb.node_types():
+            embeddings.append(emb[node_type])
+            sizes.append(emb[node_type].shape[0])
+            nodes.append(node_type)
+        # concatenate (stack) tensors
+        embeddings = torch.cat(embeddings, dim=0)
+
+        # perform PCA to reduce the dimensionality of the dataset
+        pca_results = dimensionality_reduction(data=embeddings)
+
+        # Compute cumulative sizes for correct indexing
+        cumulative_sizes = [0] + torch.cumsum(torch.tensor(sizes), dim=0).tolist()
+        colors = [parameters.get_color(node_type=nt) for nt in nodes]
+
+        # plotting
+        plt.figure(figsize=self.figsize)
+
+        # plot scatters per node type
+        for i, node in enumerate(nodes):
+            start, end = cumulative_sizes[i], cumulative_sizes[i + 1]
+            plt.scatter(
+                pca_results.pcs[start:end, 0],
+                pca_results.pcs[start:end, 1],
+                c=colors[i],
+                alpha=0.6,
+                label=node
+            )
+
+        plt.title(title, fontsize=self.tl)
+        plt.xlabel(f'PC-1, {pca_results.var[0]:.2}%', fontsize=self.xyl)
+        plt.ylabel(f'PC-2, {pca_results.var[1]:.2}%', fontsize=self.xyl)
+        plt.legend()
+
+        plt.gca().spines['top'].set_visible(False)
+        plt.gca().spines['left'].set_visible(False)
+        plt.gca().spines['right'].set_visible(False)
+        plt.gca().spines['bottom'].set_visible(False)
+
+        plt.xticks([])
+        plt.yticks([])
+
+        plt.show()
+
 
 class NodeCoordinates:
     def __init__(self, x: List[int], y: List[int], names: List[str], colors: List[str], degrees: List[int]):
@@ -109,6 +166,12 @@ class EdgeCoordinates:
     def __init__(self, x: List[int], y: List[int]):
         self.x = x
         self.y = y
+
+
+class ResultsPCA:
+    def __init__(self, principle_components: np.array, variance_ratio: np.array):
+        self.pcs = principle_components
+        self.var = variance_ratio * 100
 
 
 def get_node_traces(g: Graph, pos: Dict) -> NodeCoordinates:
@@ -148,3 +211,20 @@ def _get_edge_traces(g: Graph, pos: Dict):
         edges_y.append(None)
 
     return EdgeCoordinates(x=edges_x, y=edges_y)
+
+
+def dimensionality_reduction(data: torch.Tensor) -> ResultsPCA:
+    """
+    Perform PCA to reduce the input tensor to two dimensions.
+    """
+    # start by normalizing the data
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(data)
+
+    # perform PCA
+    pca = PCA(n_components=data.shape[1])
+    pcs = pca.fit_transform(scaled_data)
+
+    variance_ratio = pca.explained_variance_ratio_
+
+    return ResultsPCA(principle_components=pcs, variance_ratio=variance_ratio)
