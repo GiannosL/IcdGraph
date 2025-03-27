@@ -1,0 +1,84 @@
+A00
+Cholera
+A00.0
+Cholera due to Vibrio cholerae 01, biovar cholerae
+A00.1
+Cholera due to Vibrio cholerae 01, biovar eltor
+A00.9
+Cholera, unspecified
+A01
+Typhoid and paratyphoid fevers
+A01.0
+Typhoid fever
+A01.1
+Paratyphoid fever A
+A01.2
+Paratyphoid fever B
+A01.3
+Paratyphoid fever C
+A01.4
+Paratyphoid fever, unspecified
+A02
+Other salmonella infections
+A02.0
+Salmonella enteritis
+A02.1
+Salmonella sepsis
+A02.2
+Localized salmonella infections
+A02.8
+Other specified salmonella infections
+A02.9
+Salmonella infection, unspecified
+A03
+Shigellosis
+A03.0
+Shigellosis due to Shigella dysenteriae
+A03.1
+Shigellosis due to Shigella flexneri
+A03.2
+Shigellosis due to Shigella boydii
+A03.3
+Shigellosis due to Shigella sonnei
+A03.8
+Other shigellosis
+A03.9
+Shigellosis, unspecified
+A04
+Other bacterial intestinal infections
+A04.0
+Enteropathogenic Escherichia coli infection
+A04.1
+Enterotoxigenic Escherichia coli infection
+A04.2
+Enteroinvasive Escherichia coli infection
+A04.3
+Enterohaemorrhagic Escherichia coli infection
+A04.4
+Other intestinal Escherichia coli infections
+A04.5
+Campylobacter enteritis
+A04.6
+Enteritis due to Yersinia enterocolitica
+A04.7
+Enterocolitis due to Clostridium difficile
+A04.8
+Other specified bacterial intestinal infections
+A04.9
+Bacterial intestinal infection, unspecified
+A05
+Other bacterial foodborne intoxications, not elsewhere classified
+A05.0
+Foodborne staphylococcal intoxication
+A05.1
+Botulism
+A05.2
+Foodborne Clostridium perfringens [Clostridium welchii] intoxication
+A05.3
+Foodborne Vibrio parahaemolyticus intoxication
+A05.4
+Foodborne Bacillus cereus intoxication
+A05.8
+Other specified bacterial foodborne intoxications
+A05.9
+Bacterial foodborne intoxication, unspecified
