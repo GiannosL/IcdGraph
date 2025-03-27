@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Tuple
 
 
@@ -25,9 +26,11 @@ class Parameters:
         ]
         self.phecode_file = 'data/Phecode_map_v1_2_icd10_WHO_beta.csv'
         self.hpo_file = 'data/hpo-phecode1.2_links.tsv'
+        self.primekg_file = 'data/kg.csv'
 
-        self.plot_file = 'plot.png'
-        self.interactive_plot_file = 'plot.html'
+        self.plot_file = Path('~/Desktop/plot.png').expanduser()
+        self.interactive_plot_file = Path('~/Desktop/plot.html').expanduser()
+        self.training_embedding_plot_file = Path('~/Desktop/training_embeddings.png').expanduser()
 
         # node colors
         self.icd_color = '#64B6AC'

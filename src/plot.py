@@ -104,6 +104,7 @@ class Plot:
             parameters: Parameters,
             emb: EmbeddingSpace,
             title: str,
+            outfile: str = '',
     ):
         """
         Plot embedding space.
@@ -150,7 +151,11 @@ class Plot:
         plt.xticks([])
         plt.yticks([])
 
-        plt.show()
+        if outfile:
+            plt.savefig(outfile, dpi=self.dpi)
+            plt.close()
+        else:
+            plt.show()
 
 
 class NodeCoordinates:

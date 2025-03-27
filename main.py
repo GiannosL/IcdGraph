@@ -42,7 +42,8 @@ def main():
                            outfile=params.interactive_plot_file)
     plot.embedding_space(emb=results.training_embedding_space,
                          parameters=params,
-                         title='Training set embeddings')
+                         title='Training set embeddings',
+                         outfile=params.training_embedding_plot_file)
     #plot.graph(g=graph,
     #           outfile=params.plot_file)
 
