@@ -9,6 +9,7 @@ from src import Parameters
 from src.hpo import HPOtoPheCode
 from src.chapter_data import ICD
 from src.phecodes import PheCodes
+from src.primekg import PrimeKG
 
 
 class Graph:
@@ -17,7 +18,8 @@ class Graph:
             p: Parameters,
             icd_data: ICD,
             phecode_data: PheCodes,
-            hpo_data: HPOtoPheCode
+            hpo_data: HPOtoPheCode,
+            primekg_data: PrimeKG
     ):
         # edge dictionary
         self.edge_dictionary = {}
@@ -42,6 +44,11 @@ class Graph:
         self.edge_dictionary[('phecode', 'rev_connection_to', 'hpo')] = get_reverse_edgelist(
             edge_list=self.edge_dictionary[('hpo', 'is_connected_to', 'phecode')]
         )
+
+        # Integrate PrimeKG
+        self.primekg = primekg_data.edge_dictionary
+        for edge_type, edge_list in self.primekg.items():
+            self.edge_dictionary[edge_type] = edge_list
 
         # gather information on data
         self.node_dictionary = self.get_info()

@@ -55,6 +55,10 @@ class Parameters:
         self.icd_color = '#64B6AC'
         self.phecode_color = '#FAD4C0'
         self.hpo_color = '#C0FDFB'
+        self.protein_color = '#2DD881'
+        self.drug_color = '#DE9E36'
+        self.disease_color = '#1C0B19'
+        self.pathway_color = '#BFBDC1'
 
         # edge of interest
         self.edge_type = EdgeType(
@@ -78,5 +82,13 @@ class Parameters:
             return self.phecode_color
         elif node_type == 'hpo':
             return self.hpo_color
+        elif node_type == 'protein':
+            return self.protein_color
+        elif node_type == 'drug':
+            return self.drug_color
+        elif node_type == 'disease':
+            return self.disease_color
+        elif node_type == 'pathway':
+            return self.pathway_color
 
         raise ValueError(f'Node type "{node_type}" not available!')

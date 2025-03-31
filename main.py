@@ -26,7 +26,8 @@ def main():
     graph = Graph(p=params,
                   icd_data=icd,
                   phecode_data=phecodes2icd,
-                  hpo_data=hpo2phecode)
+                  hpo_data=hpo2phecode,
+                  primekg_data=primekg)
 
     # save graph statistiscs
     graph.graph_statistics()
